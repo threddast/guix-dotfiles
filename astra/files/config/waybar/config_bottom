@@ -1,0 +1,80 @@
+//
+// Riccardo Palombo - https://riccardo.im
+// Preparato per la community Patreon: patreon.com/riccardopalombo
+//
+
+{
+     "layer": "top", // Waybar at top layer
+     "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 28, // Waybar height (to be removed for auto height)
+    //"width": 1480, // Waybar width
+    "spacing": 8, // Gaps between modules (4px)
+
+    // Choose the order of the modules
+    "modules-left": ["custom/command", "hyprland/window"],
+    "modules-center": ["disk"],
+   // "modules-right": ["custom/write", "custom/pacman", "custom/crypto],
+
+    // Modules configuration
+"custom/crypto": {
+    "format": "{}",
+    "interval": 600,
+    "return-type": "json",
+    "exec": "~/.config/waybar/modules/crypto/waybar_crypto.py",
+    "exec-if": "ping pro-api.coinmarketcap.com -c1"
+},
+
+   "custom/gammastep": {
+         "format": "{}",
+         "tooltip": false,
+         "interval": 5,
+         "on-update": "",
+         "exec": "sleep 0.05; $HOME/scripts/gammastep.sh",
+         "on-click": "bash $HOME/scripts/gammastep.sh toggle"
+  },
+
+"custom/pacman": {
+    "format": "PACMAN [{}]",
+    "interval": 7200,                     
+    "exec": "checkupdates | wc -l",       
+    "exec-if": "exit 0",
+    "on-click": "footclient --override=colors.background=000000 --title=fly-foot sudo pacman -Syu",                  
+    "signal": 8,
+    "tooltip": false,
+},
+
+"custom/command": {
+    "format": " ",
+    "on-click": "$HOME/scripts/rofi-power.sh",
+    "tooltip": false
+    },
+
+"hyprland/window": {
+    "format": "{}"
+},
+    "user": {
+            "format": "UPTIME [{work_d}D {work_H}H {work_M}M]",
+            "interval": 60,
+            "avatar": "/home/mm/pics/icons/face1.png",  
+            "height": 28,
+        	"width": 28,
+        	"icon": false,
+        	"open-on-click": true,
+        	"open-path": "home/mm/"
+    },
+  "custom/write": {
+        "format": "WRITE [!]",
+        "on-click": "footclient --title=fly-foot-write --override=colors.background=228b22 --override=colors.foreground=000000 micro $HOME/dotfiles/thinkpad-x1-10gen/README", 
+        // "on-click": "apostrophe ~/dotfiles/thinkpad-x1-10gen/README",
+        "tooltip": false
+        },
+        
+   "disk": {
+            "interval": 60,
+            "format": "VAULT OPEN",
+            "path": "/mnt/veracrypt1",
+            "on-click": "nemo",
+            "tooltip-format": "{path} ({percentage_used}%)"
+        }
+ }
+

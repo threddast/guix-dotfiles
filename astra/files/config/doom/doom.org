@@ -1,0 +1,1210 @@
+#+title: Doom
+#+auto_tangle: t
+#+startup: fold
+
+* Table of contents :TOC_2:
+- [[#references][References]]
+- [[#doom-config-files-headers][Doom config files headers]]
+- [[#doom-modules][Doom modules]]
+- [[#general-config][General config]]
+  - [[#fonts-theme-and-other-visual-settings][Fonts, theme and other visual settings]]
+  - [[#keybindings][Keybindings]]
+- [[#org-mode][Org-mode]]
+  - [[#general-settings][General settings]]
+  - [[#org-roam][Org-roam]]
+  - [[#org-super-agenda][Org-super-agenda]]
+  - [[#org-download][Org-download]]
+  - [[#org-export-to-latex][Org export to LaTeX]]
+  - [[#org-noter--org-pdftools][Org-noter & org-pdftools]]
+  - [[#org-tables-move-single-cells][Org tables move single cells]]
+  - [[#org-modern][Org-modern]]
+  - [[#org-anki][Org-Anki]]
+  - [[#org-clock][Org-clock]]
+  - [[#org-automatic-tangling][Org Automatic tangling]]
+  - [[#org-chef][Org-chef]]
+  - [[#lorem-ipsum-generator][Lorem ipsum generator]]
+  - [[#presentations-with-org][Presentations with org]]
+  - [[#latex-fragments-in-org-mode][Latex fragments in org mode]]
+  - [[#org-caldav][Org-caldav]]
+- [[#other-packages][Other packages]]
+  - [[#treemacs][Treemacs]]
+  - [[#transpose-frame][Transpose frame]]
+  - [[#setting-tab-width][Setting tab width]]
+  - [[#guix][Guix]]
+  - [[#beancount-multiple-files][Beancount multiple files]]
+  - [[#multiple-vterm][Multiple vterm]]
+  - [[#magit][Magit]]
+  - [[#polymode][Polymode]]
+  - [[#tree-sitter-for-regex][Tree sitter for regex]]
+
+* References
+
+- [[https://github.com/danilevy1212/doom]]
+- [[https://www.gtrun.org/post/config/]]
+- https://xqzp.net/pmy/blog/sync-org-mode-agenda-to-calendar-apps/
+- https://github.com/daviwil/dotfiles/blob/master/Emacs.org
+- https://gitlab.com/zzamboni/dot-doom/
+
+* Doom config files headers
+
+#+begin_src elisp :tangle init.el
+;;; init.el -*- lexical-binding: t; -*-
+
+;; This file controls what Doom modules are enabled and what order they load
+;; in. Remember to run 'doom sync' after modifying it!
+
+;; NOTE Press 'SPC h d h' (or 'C-h d h' for non-vim users) to access Doom's
+;;      documentation. There you'll find a link to Doom's Module Index where all
+;;      of our modules are listed, including what flags they support.
+
+;; NOTE Move your cursor over a module's name (or its flags) and press 'K' (or
+;;      'C-c c k' for non-vim users) to view its documentation. This works on
+;;      flags as well (those symbols that start with a plus).
+;;
+;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
+;;      directory (for easy access to its source code).
+
+#+end_src
+
+#+begin_src elisp :tangle packages.el
+;; -*- no-byte-compile: t; -*-
+;;; $DOOMDIR/packages.el
+
+;; To install a package with Doom you must declare them here and run 'doom sync'
+;; on the command line, then restart Emacs for the changes to take effect -- or
+;; use 'M-x doom/reload'.
+
+
+;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;(package! some-package)
+
+;; To install a package directly from a remote git repo, you must specify a
+;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
+;; https://github.com/radian-software/straight.el#the-recipe-format
+;(package! another-package
+;  :recipe (:host github :repo "username/repo"))
+
+;; If the package you are trying to install does not contain a PACKAGENAME.el
+;; file, or is located in a subdirectory of the repo, you'll need to specify
+;; `:files' in the `:recipe':
+;(package! this-package
+;  :recipe (:host github :repo "username/repo"
+;           :files ("some-file.el" "src/lisp/*.el")))
+
+;; If you'd like to disable a package included with Doom, you can do so here
+;; with the `:disable' property:
+;(package! builtin-package :disable t)
+
+;; You can override the recipe of a built in package without having to specify
+;; all the properties for `:recipe'. These will inherit the rest of its recipe
+;; from Doom or MELPA/ELPA/Emacsmirror:
+;(package! builtin-package :recipe (:nonrecursive t))
+;(package! builtin-package-2 :recipe (:repo "myfork/package"))
+
+;; Specify a `:branch' to install a package from a particular branch or tag.
+;; This is required for some packages whose default branch isn't 'master' (which
+;; our package manager can't deal with; see radian-software/straight.el#279)
+;(package! builtin-package :recipe (:branch "develop"))
+
+;; Use `:pin' to specify a particular commit to install.
+;(package! builtin-package :pin "1a2b3c4d5e")
+
+
+;; Doom's packages are pinned to a specific commit and updated from release to
+;; release. The `unpin!' macro allows you to unpin single packages...
+;(unpin! pinned-package)
+;; ...or multiple packages
+;(unpin! pinned-package another-pinned-package)
+;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
+;(unpin! t)
+
+#+end_src
+
+#+begin_src elisp :tangle config.el
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+
+;; Place your private configuration here! Remember, you do not need to run 'doom
+;; sync' after modifying this file!
+
+
+;; Some functionality uses this to identify you, e.g. GPG configuration, email
+;; clients, file templates and snippets. It is optional.
+;; (setq user-full-name "John Doe"
+;;       user-mail-address "john@doe.com")
+
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
+;;
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+;;
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
+
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
+;; (setq doom-theme 'doom-one)
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+;; (setq display-line-numbers-type t)
+
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+;; (setq org-directory "~/org/")
+
+
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
+;;
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package!' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
+;; - `map!' for binding new keys
+;;
+;; To get information about any of these functions/macros, move the cursor over
+;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
+;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
+;;
+;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
+;; they are implemented.
+
+#+end_src
+
+* Doom modules
+
+#+begin_src elisp :tangle init.el
+(doom! :input
+       ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
+       ;;chinese
+       ;;japanese
+       ;;layout            ; auie,ctsrnm is the superior home row
+
+       :completion
+       company            ; the ultimate code completion backend
+       ;;helm              ; the *other* search engine for love and life
+       ;;ido               ; the other *other* search engine...
+       ;;ivy               ; a search engine for love and life
+       vertico            ; the search engine of the future
+
+       :ui
+       ;;deft              ; notational velocity for Emacs
+       doom                ; what makes DOOM look the way it does
+       doom-dashboard      ; a nifty splash screen for Emacs
+       ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
+       ;;(emoji +unicode)  ; 🙂
+       ;;hl-todo             ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       ;;hydra
+       ;;indent-guides     ; highlighted indent columns
+       ligatures          ; ligatures and symbols to make your code pretty again
+
+       ;;minimap           ; show a map of the code on the side
+       modeline           ; snazzy, Atom-inspired modeline, plus API
+       nav-flash           ; blink cursor line after big motions
+       ;;neotree           ; a project drawer, like NERDTree for vim
+       ophints             ; highlight the region an operation acts on
+       (popup              ; tame sudden yet inevitable temporary windows
+        +all
+        +defaults)
+       ;;tabs              ; a tab bar for Emacs
+       (treemacs           ; a project drawer, like neotree but cooler
+        +lsp)
+       ;;unicode           ; extended unicode support for various languages
+       (vc-gutter          ; vcs diff in the fringe
+        +pretty)
+       vi-tilde-fringe     ; fringe tildes to mark beyond EOB
+       ;;window-select     ; visually switch windows
+       workspaces          ; tab emulation, persistence & separate workspaces
+       ;;zen                 ; distraction-free coding or writing
+
+       :editor
+       (evil +everywhere); come to the dark side, we have cookies
+       file-templates      ; auto-snippets for empty files
+       fold                ; (nigh) universal code folding
+       (format +onsave)  ; automated prettiness
+       ;;god               ; run Emacs commands without modifier keys
+       ;;lispy             ; vim for lisp, for people who don't like vim
+       ;;multiple-cursors  ; editing in many places at once
+       ;;objed             ; text object editing for the innocent
+       parinfer          ; turn lisp into python, sort of
+       ;;rotate-text       ; cycle region at point between text candidates
+       snippets            ; my elves. They type so I don't have to
+       ;;word-wrap         ; soft wrapping with language-aware indent
+
+       :emacs
+       dired              ; making dired pretty [functional]
+       electric            ; smarter, keyword-based electric-indent
+       ;;ibuffer           ; interactive buffer management
+       (undo +tree)               ; persistent, smarter undo for your inevitable mistakes
+       vc                  ; version-control and Emacs, sitting in a tree
+
+       :term
+       ;;eshell            ; the elisp shell that works everywhere
+       ;;shell             ; simple shell REPL for Emacs
+       ;;term              ; basic terminal emulator for Emacs
+       vterm               ; the best terminal emulation in Emacs
+
+       :checkers
+       syntax             ; tasing you for every semicolon you forget
+       ;;spell              ; tasing you for misspelling mispelling
+       ;;grammar           ; tasing grammar mistake every you make
+
+       :tools
+       ;;ansible
+       ;;biblio            ; Writes a PhD for you (citation needed)
+       ;;debugger          ; FIXME stepping through code, to help you add bugs
+       ;;direnv
+       (docker +lsp)
+       ;;editorconfig      ; let someone else argue about tabs vs spaces
+       ;;ein               ; tame Jupyter notebooks with emacs
+       (eval +overlay)     ; run code, run (also, repls)
+       ;;gist              ; interacting with github gists
+       lookup             ; navigate your code and its documentation
+       lsp                ; M-x vscode
+       magit              ; a git porcelain for Emacs
+       ;;make              ; run make tasks from Emacs
+       ;;pass              ; password manager for nerds
+       pdf                 ; pdf enhancements
+       ;;prodigy           ; FIXME managing external services & code builders
+       rgb                 ; creating color strings
+       ;;taskrunner        ; taskrunner for all your projects
+       ;;terraform         ; infrastructure as code
+       ;;tmux              ; an API for interacting with tmux
+       tree-sitter         ; syntax and parsing, sitting in a tree...
+       upload            ; map local to remote projects via ssh/ftp
+
+       :os
+       (:if IS-MAC macos)  ; improve compatibility with macOS
+       (tty +osc)          ; improve the terminal Emacs experience
+
+       :lang
+       ;;agda              ; types of types of types of types...
+       (beancount +lsp)    ; mind the GAAP
+       (cc                 ; C > C++ == 1
+        +lsp
+        +tree-sitter)
+       ;;clojure           ; java with a lisp
+       ;;common-lisp       ; if you've seen one lisp, you've seen them all
+       ;;coq               ; proofs-as-programs
+       ;;crystal           ; ruby at the speed of c
+       ;;csharp            ; unity, .NET, and mono shenanigans
+       data                ; config/data formats
+       ;;(dart +flutter)   ; paint ui and not much else
+       ;;dhall
+       ;;elixir            ; erlang done right
+       ;;elm               ; care for a cup of TEA?
+       emacs-lisp          ; drown in parentheses
+       ;;erlang            ; an elegant language for a more civilized age
+       ;;ess               ; emacs speaks statistics
+       ;;factor
+       ;;faust             ; dsp, but you get to keep your soul
+       ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
+       ;;fsharp            ; ML stands for Microsoft's Language
+       ;;fstar             ; (dependent) types and (monadic) effects and Z3
+       ;;gdscript          ; the language you waited for
+       ;;(go +lsp)         ; the hipster dialect
+       ;;(graphql +lsp)    ; Give queries a REST
+       ;;(haskell +lsp)    ; a language that's lazier than I am
+       ;;hy                ; readability of scheme w/ speed of python
+       ;;idris             ; a language you can depend on
+       (json               ; At least it ain't XML
+        +lsp
+        +tree-sitter)
+       ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
+       (javascript        ; all(hope(abandon(ye(who(enter(here))))))
+        +lsp
+        +tree-sitter)
+       ;;julia             ; a better, faster MATLAB
+       ;;kotlin            ; a better, slicker Java(Script)
+       (latex              ; writing papers in Emacs has never been so fun
+        +cdlatex
+        +fold
+        +lsp)
+       ;;lean              ; for folks with too much to prove
+       ;;ledger            ; be audit you can be
+       ;;lua               ; one-based indices? one-based indices
+       markdown            ; writing docs for people to ignore
+       ;;nim               ; python + lisp at the speed of c
+       ;;nix               ; I hereby declare "nix geht mehr!"
+       ;;ocaml             ; an objective camel
+       (org                ; organize your plain life in plain text
+        +contacts
+        +dragndrop
+        +noter
+        +pandoc
+        +roam2)
+       ;;php               ; perl's insecure younger brother
+       ;;plantuml          ; diagrams for confusing people more
+       ;;purescript        ; javascript, but functional
+       (python             ; beautiful is better than ugly
+        +lsp
+        +tree-sitter)
+       ;;qt                ; the 'cutest' gui framework ever
+       ;;racket            ; a DSL for DSLs
+       ;;raku              ; the artist formerly known as perl6
+       ;;rest              ; Emacs as a REST client
+       ;;rst               ; ReST in peace
+       (ruby               ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+        +lsp
+        +tree-sitter
+        +rails)
+       ;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       ;;scala             ; java, but good
+       (scheme           ; a fully conniving family of lisps
+         +guile)
+       (sh                 ; she sells {ba,z,fi}sh shells on the C xor
+        +fish
+        +lsp
+        +tree-sitter)
+       ;;sml
+       ;;solidity          ; do you need a blockchain? No.
+       ;;swift             ; who asked for emoji variables?
+       ;;terra             ; Earth and Moon in alignment for performance.
+       ;;web               ; the tubes
+       (yaml              ; JSON, but readable
+        +lsp
+        +tree-sitter)
+       ;;zig               ; C, but simpler
+
+       :email
+       (mu4e +org)
+       ;;notmuch
+       ;;(wanderlust +gmail)
+
+       :app
+       ;;calendar
+       ;;emms
+       ;;everywhere        ; *leave* Emacs!? You must be joking
+       irc               ; how neckbeards socialize
+       ;;(rss +org)        ; emacs as an RSS reader
+       ;;twitter           ; twitter client https://twitter.com/vnought
+
+       :config
+       ;;literate
+       (default +bindings +smartparens))
+#+end_src
+
+* General config
+
+My user information:
+
+#+begin_src elisp :tangle config.el
+(setq user-full-name "Erik Giorgis"
+      user-mail-address "egiorgis@egiorg.is")
+#+end_src
+
+When at the beginning of the line, make =Ctrl-K= remove the whole line, instead of just emptying it.
+
+#+begin_src elisp :tangle config.el
+;(setq kill-whole-line t)
+#+end_src
+
+Disable line numbers.
+
+#+begin_src elisp :tangle config.el
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type nil)
+#+end_src
+
+For some reason Doom disables auto-save and backup files by default. Let's reenable them.
+
+#+begin_src elisp :tangle config.el
+(setq auto-save-default t
+      make-backup-files t)
+#+end_src
+
+Disable exit confirmation.
+
+#+begin_src elisp :tangle config.el
+(setq confirm-kill-emacs nil)
+#+end_src
+
+Automatically revert files when change on disk.
+
+#+begin_src elisp :tangle config.el
+(global-auto-revert-mode)
+#+end_src
+
+** Fonts, theme and other visual settings
+
+Little function to toggle cycle between light and dark theme
+
+#+begin_src elisp :tangle config.el
+;; (defun synchronize-theme ()
+;;   (let* ((light-theme 'doom-nord-light)
+;;          (dark-theme 'doom-nord)
+;;          (start-time-light-theme 5)
+;;          (end-time-light-theme 16)
+;;          (hour (string-to-number (substring (current-time-string) 11 13)))
+;;          (next-theme (if (member hour (number-sequence start-time-light-theme end-time-light-theme))
+;;                          light-theme dark-theme)))
+;;     (when (not (equal doom-theme next-theme))
+;;       (setq doom-theme next-theme)
+;;       (load-theme next-theme t))))
+
+;; (run-with-timer 0 900 'synchronize-theme)
+#+end_src
+
+Manually set the theme.
+
+#+begin_src elisp :tangle config.el
+(setq doom-theme 'doom-nord)
+#+end_src
+
+Set the font
+
+#+begin_src elisp :tangle config.el
+(setq doom-font (font-spec :family "Iosevka")
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile"))
+#+end_src
+
+Use variable pitch font in org-mode
+
+#+begin_src elisp :tangle config.el
+;; (add-hook! 'org-mode-hook #'mixed-pitch-mode)
+;; (setq mixed-pitch-variable-pitch-cursor nil)
+#+end_src
+
+Enable pixel scrolling
+
+#+begin_src elisp :tangle config.el
+(pixel-scroll-precision-mode 1)
+#+end_src
+
+Adjust cursor
+
+#+begin_src emacs-lisp :tangle config.el
+;; (setq-default cursor-type 'bar)
+(setq evil-move-cursor-back nil)
+#+end_src
+
+Emacsclient use correct theme
+
+#+begin_src emacs-lisp :tangle config.el
+(defun load-doom-theme (frame)
+  (select-frame frame)
+  (load-theme doom-theme t))
+
+(if (daemonp)
+  (add-hook 'after-make-frame-functions #'load-doom-theme)
+  (load-theme doom-theme t))
+#+end_src
+
+** Keybindings
+
+Org roam
+
+#+begin_src elisp :tangle config.el
+(map! :leader
+      (:prefix-map ("r" . "roam")
+       (:desc "Insert node"       "i" #'org-roam-node-insert
+        :desc "Find node"         "f" #'org-roam-node-find
+        :desc "Today's journal"   "t" #'org-roam-dailies-goto-today
+        :desc "Journal goto date" "d" #'org-roam-dailies-goto-date
+        :desc "Capture"           "c" #'org-roam-capture
+        :desc "Capture today"     "t" #'org-roam-dailies-capture-today
+        :desc "Open agenda menu"  "a" #'org-agenda)))
+#+end_src
+
+Move around in windows and workspaces
+
+#+begin_src elisp
+;; (map! :leader
+;;       (:when (modulep! :ui workspaces)
+;;        (:prefix-map ("TAB" . "workspace")
+;;         :desc "Display tab bar"           "TAB" #'+workspace/display
+;;         :desc "Switch workspace"          "."   #'+workspace/switch-to
+;;         :desc "Switch to last workspace"  "`"   #'+workspace/other
+;;         :desc "New workspace"             "n"   #'+workspace/new
+;;         :desc "New named workspace"       "N"   #'+workspace/new-named
+;;         :desc "Load workspace from file"  "l"   #'+workspace/load
+;;         :desc "Save workspace to file"    "s"   #'+workspace/save
+;;         :desc "Delete session"            "x"   #'+workspace/kill-session
+;;         :desc "Delete this workspace"     "d"   #'+workspace/delete
+;;         :desc "Rename workspace"          "r"   #'+workspace/rename
+;;         :desc "Restore last session"      "R"   #'+workspace/restore-last-session
+;;         :desc "Next workspace"            "]"   #'+workspace/switch-right
+;;         :desc "Previous workspace"        "["   #'+workspace/switch-left
+
+;;         :desc "Switch to 1st workspace"   "1"   #'+workspace/switch-to-0
+;;         :desc "Switch to 2nd workspace"   "2"   #'+workspace/switch-to-1
+;;         :desc "Switch to 3rd workspace"   "3"   #'+workspace/switch-to-2
+;;         :desc "Switch to 4th workspace"   "4"   #'+workspace/switch-to-3
+;;         :desc "Switch to 5th workspace"   "5"   #'+workspace/switch-to-4
+;;         :desc "Switch to 6th workspace"   "6"   #'+workspace/switch-to-5
+;;         :desc "Switch to 7th workspace"   "7"   #'+workspace/switch-to-6
+;;         :desc "Switch to 8th workspace"   "8"   #'+workspace/switch-to-7
+;;         :desc "Switch to 9th workspace"   "9"   #'+workspace/switch-to-8
+;;         :desc "Switch to final workspace" "0"   #'+workspace/switch-to-final)))
+
+;; (map! :leader :nv "w" nil)
+
+;; (map! :leader
+;;   (:prefix-map ("w" . "window")
+;;     :desc "Window move left"              "n" #'windmove-left
+;;     :desc "Window move right"             "i" #'windmove-right
+;;     :desc "Window move up"                "u" #'windmove-up
+;;     :desc "Window move down"              "e" #'windmove-down
+
+;;     :desc "Window swap left"              "N" #'windmove-swap-states-left
+;;     :desc "Window swap right"             "I" #'windmove-swap-states-right
+;;     :desc "Window swap up"                "U" #'windmove-swap-states-up
+;;     :desc "Window swap down"              "E" #'windmove-swap-states-down
+
+;;     :desc "Kill current window"           "k" #'+workspace/close-window-or-workspace
+;;     :desc "Split window horizontally"     "h" #'split-window-horizontally
+;;     :desc "Split window vertically"       "v" #'split-window-vertically
+
+;;     :desc "Increase font size"            "=" #'doom/increase-font-size
+;;     :desc "Decrease font size"            "-" #'doom/decrease-font-size))
+
+;; (global-set-key (kbd "S-C-<left>")  'shrink-window-horizontally)
+;; (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+;; (global-set-key (kbd "S-C-<down>")  'shrink-window)
+;; (global-set-key (kbd "S-C-<up>")    'enlarge-window)
+#+end_src
+
+* Org-mode
+** General settings
+#+begin_src elisp :tangle config.el
+(setq org-directory "~/org")
+#+end_src
+
+** Org-roam
+#+begin_src elisp :tangle config.el
+(setq org-roam-directory "~/org")
+;(load-file "~/.config/doom/org-roam-capture-templates.el")
+(setq org-roam-completion-everywhere t)
+
+(setq org-roam-capture-templates
+    '(("d" "default" entry "* %?"
+       :target (file+head "${slug}.org"
+                          "#+title: ${title}")
+       :unnarrowed t)
+       ("i" "inbox" entry "* %?")))
+
+(setq org-roam-dailies-capture-templates
+  '(("p" "personal" plain "* TODO %?"
+     :target (file+head "%<%Y-%m-%d>.org"
+                        "#+title: %<%Y-%m-%d %A>\n#+created: %<%Y-%m-%d>\n#+modified:\n\n<d")
+     :unarrowed t)
+    ("e" "ergon" plain "* TODO %?"
+     :target (file+head "ergon/%<%Y-%m-%d>-ergon.org"
+                        "#+title: %<%Y-%m-%d %A> Ergon\n#+created: %<%Y-%m-%d>\n#+modified:\n\n<de")
+     :unarrowed t)))
+
+
+
+
+(setq org-roam-dailies-directory "~/org/logs/daily")
+(add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+                  (display-buffer-in-direction)
+                  (direction . right)
+                  (window-width . 0.33)
+                  (window-height . fit-window-to-buffer)))
+(org-roam-db-autosync-mode)
+#+end_src
+
+** Org-super-agenda
+
+#+begin_src elisp :tangle packages.el
+(package! org-super-agenda)
+#+end_src
+
+#+begin_src elisp :tangle config.el
+
+   ;; And then the org-agenda-custom-command config
+
+(require 'org-super-agenda)
+(use-package! org-super-agenda
+  :config
+  (add-hook! 'after-init-hook 'org-super-agenda-mode)
+  (require 'org-habit)
+  (setq
+   org-agenda-skip-scheduled-if-done nil
+   org-agenda-skip-deadline-if-done t
+   org-agenda-include-deadlines t
+   org-agenda-include-diary t
+   org-agenda-block-separator t
+   org-agenda-compact-blocks t
+   org-agenda-remove-tags t
+   org-agenda-start-with-log-mode t)
+  )
+
+(setq
+
+  org-habit-preceding-days 14
+  +org-habit-min-width 21
+  org-habit-show-all-today t
+  org-habit-show-done-always-green t
+  +org-habit-graph-padding 1
+  )
+;; set the files for the agenda
+;; Thanks to [[https://stackoverflow.com/questions/11384516/how-to-make-all-org-files-under-a-folder-added-in-agenda-list-automatically][Stackoverflow]]
+(setq org-agenda-files (directory-files-recursively "~/org/" "\\.org$"))
+;(setq org-icalendar-combined-agenda-file "~/roam/calendar.ics")
+;(setq org-agenda-files '("~/roam/0-inbox" "~/roam/pages/MTEC/" "~/roam/pages/MTEC/FS2022/"))
+
+;; start the week on Monday
+(setq calendar-week-start-day 1)
+
+;; set the todo keywords and its shortcuts
+(setq org-todo-keywords  '((sequence "TODO(t)" "NEXT(n)" "WAIT(w)" "SDAY(s)" "|" "DONE(d)" "CANC(c@)")))
+(setq org-log-done 'time)
+; instead of trying to do all this shit, just always put a timestamp to a deadline
+;(when-let ((day (org-find-text-property-in-string 'ts-date item)))
+ ;            (= day this-day)))
+
+;; this might be relevant for the clock table
+;; https://github.com/trev-dev/emacs#org
+
+;; set up the super agenda view
+(setq org-agenda-custom-commands
+      '(("x" alltodo "" nil ,(list org-agenda-private-local-path))
+        ("u" "Super view"
+           ((agenda "" ((org-agenda-span 1)
+                        (org-super-agenda-groups
+                         '(
+                           (:name "Today"
+                            :tag ("bday" "ann" "hols" "cal" "today")
+                            :time-grid t
+                            :todo ("WIP")
+                            :deadline today
+                            :scheduled today)
+                           (:name "Overdue"
+                              :deadline past)
+                           (:name "Reschedule"
+                              :scheduled past)
+                           (:name "Perso"
+                              :tag "perso")
+                           (:name "Due Soon"
+                              :deadline future
+                              :scheduled future))))
+             (tags
+              (concat "w" (format-time-string "%V"))
+              ((org-agenda-overriding-header  (concat "--\nToDos Week " (format-time-string "%V")))
+               (org-super-agenda-groups
+                '((:discard (:deadline t))
+                  (:discard (:scheduled t))
+                  (:discard (:todo ("DONE")))
+                  (:name "Ticklers"
+                     :tag "someday")
+                  (:name "Perso"
+                     :and (:tag "perso" :not (:tag "someday")))
+                  (:name "UH"
+                     :and (:tag "uh" :not (:tag "someday")))
+                  ;; (:name "Neo"
+                  ;;  :and (:tag "neo" :not (:tag "someday")))
+                  (:name "Ping"
+                     :tag "crm"))))))))))
+
+#+end_src
+** Org-download
+Provided in the doom org flag +dragndrop
+
+#+begin_src elisp :tangle config.el
+(setq org-download-method 'directory)
+#+end_src
+
+** Org export to LaTeX
+
+Especially used to export the CV
+#+begin_src elisp :tangle config.el
+(setq +latex-viewers '(evince))
+
+(after! org
+  (use-package! ox-extra
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines))))
+
+(after! org
+  ;; Import ox-latex to get org-latex-classes and other funcitonality
+  ;; for exporting to LaTeX from org
+  (use-package! ox-latex
+    :init
+    ;; code here will run immediately
+    :config
+    ;; code here will run after the package is loaded
+    (setq org-latex-pdf-process
+          '("pdflatex -interaction nonstopmode -output-directory %o %f"
+            "bibtex %b"
+            "pdflatex -interaction nonstopmode -output-directory %o %f"
+            "pdflatex -interaction nonstopmode -output-directory %o %f"))
+    (setq org-latex-with-hyperref nil) ;; stop org adding hypersetup{author..} to latex export
+    ;; (setq org-latex-prefer-user-labels t)
+
+    ;; deleted unwanted file extensions after latexMK
+    (setq org-latex-logfiles-extensions
+          (quote ("lof" "lot" "tex~" "aux" "idx" "log" "out" "toc" "nav" "snm" "vrb" "dvi" "fdb_latexmk" "blg" "brf" "fls" "entoc" "ps" "spl" "bbl" "xmpi" "run.xml" "bcf" "acn" "acr" "alg" "glg" "gls" "ist")))
+
+    (unless (boundp 'org-latex-classes)
+      (setq org-latex-classes nil)))
+)
+#+end_src
+
+** Org-noter & org-pdftools
+
+#+begin_src elisp :tangle config.el
+;; custom keybindings for noter
+(map! :leader
+      (:prefix ("n")
+       (:desc "Insert note at point" "i" #'org-noter-insert-note)))
+;; prevent from collapsing everything
+(after! org-noter
+  (setq
+   ;; I want to see the whole file
+   org-noter-hide-other t
+   ;; I want to not open a new frame every time
+   org-noter-always-create-frame nil))
+
+;; for lone truncation
+(defun my/no-op (&rest args))
+(advice-add 'org-noter--set-notes-scroll :override 'my/no-op)
+#+end_src
+
+** Org tables move single cells
+
+Move single cells using C-M-up C-M-down C-M-left C-M-right, got from [[https://cs.gmu.edu/~kauffman/software/org-table-move-single-cell.el][George Mason University]]
+#+begin_src elisp :tangle config.el
+(add-hook 'org-mode-hook
+ #'(lambda ()
+    (local-set-key [C-M-up] (quote org-table-move-single-cell-up))
+    (local-set-key [C-M-down] (quote org-table-move-single-cell-down))
+    (local-set-key [C-M-left] (quote org-table-move-single-cell-left))
+    (local-set-key [C-M-right] (quote org-table-move-single-cell-right))))
+
+(defun org-table-swap-cells (i1 j1 i2 j2)
+  "Swap two cells"
+  (let ((c1 (org-table-get i1 j1))
+  (c2 (org-table-get i2 j2)))
+    (org-table-put i1 j1 c2)
+    (org-table-put i2 j2 c1)
+    (org-table-align)))
+
+(defun org-table-move-single-cell (direction)
+  "Move the current cell in a cardinal direction according to the
+  parameter symbol: 'up 'down 'left 'right. Swaps contents of
+  adjacent cell with current one."
+  (unless (org-at-table-p)
+    (error "No table at point"))
+  (let ((di 0) (dj 0))
+    (cond ((equal direction 'up) (setq di -1))
+          ((equal direction 'down) (setq di +1))
+          ((equal direction 'left) (setq dj -1))
+          ((equal direction 'right) (setq dj +1))
+          (t (error "Not a valid direction, must be up down left right")))
+    (let* ((i1 (org-table-current-line))
+           (j1 (org-table-current-column))
+           (i2 (+ i1 di))
+           (j2 (+ j1 dj)))
+      (org-table-swap-cells i1 j1 i2 j2)
+      (org-table-goto-line i2)
+      (org-table-goto-column j2))))
+
+(defun org-table-move-single-cell-up ()
+  "Move a single cell up in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'up))
+
+(defun org-table-move-single-cell-down ()
+  "Move a single cell down in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'down))
+
+(defun org-table-move-single-cell-left ()
+  "Move a single cell left in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'left))
+
+(defun org-table-move-single-cell-right ()
+  "Move a single cell right in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'right))
+#+end_src
+
+** Org-modern
+#+begin_src elisp :tangle packages.el
+(package! org-modern)
+#+end_src
+
+#+begin_src elisp :tangle config.el
+;; org-modern enable as minor mode
+(global-org-modern-mode)
+
+;; Choose some fonts
+(set-face-attribute 'org-drawer nil :height 0.8)
+(set-face-attribute 'org-document-title nil :height 1.5)
+
+(setq
+  ;; Edit settings
+  org-auto-align-tags nil
+  org-tags-column 0
+  org-catch-invisible-edits 'show-and-error
+  org-special-ctrl-a/e t
+  org-insert-heading-respect-content t
+  org-ellipsis  " ⤵" ;; ⤵ ▼ 
+  ;; Org styling, hide markup etc.
+  org-hide-emphasis-markers t
+  org-pretty-entities t
+  org-cycle-separator-lines -1
+  org-modern-todo nil
+  org-fontify-done-headline nil)
+
+(setq org-modern-star '("◉" "○" "◈" "◇"))
+
+(setq org-modern-todo-faces
+      '(("WAIT" :background "#AC4426" :foreground "#ECEFF4" :weight bold)
+        ("NEXT" :background "#398EAC" :foreground "#ECEFF4" :weight bold)
+        ("TODO" :background "#4F894C" :foreground "#ECEFF4" :weight bold)
+        ("SDAY" :background "#B48EAD" :foreground "#ECEFF4" :weight bold)))
+#+end_src
+
+** Org-Anki
+
+#+begin_src elisp :tangle packages.el
+(package! org-anki)
+#+end_src
+
+#+begin_src elisp :tangle config.el
+(map! :leader
+      (:prefix-map ("a" . "anki")
+       (:desc "Org-Anki sync entry" "s" #'org-anki-sync-entry
+        :desc "Org-Anki delete entry" "d" #'org-anki-delete-entry)))
+#+end_src
+
+** Org-clock
+
+Change the keymaps to clock in and out
+#+begin_src elisp :tangle config.el
+(map! :leader
+      (:prefix-map ("k" . "clock")
+       (:desc "Org clock-in" "i" #'org-clock-in
+        :desc "Org clock-out" "o" #'org-clock-out
+        :desc "Org clock goto" "g" #'org-clock-goto)))
+#+end_src
+
+** Org Automatic tangling
+#+begin_src elisp :tangle packages.el
+(package! org-auto-tangle)
+#+end_src
+
+#+begin_src elisp :tangle config.el
+ (require 'org-auto-tangle)
+ (add-hook 'org-mode-hook 'org-auto-tangle-mode)
+#+end_src
+
+** Org-chef
+
+#+begin_src elisp :tangle packages.el
+(package! org-chef)
+#+end_src
+
+** Lorem ipsum generator
+#+begin_src elisp :tangle packages.el
+(package! lorem-ipsum)
+#+end_src
+
+** Presentations with org
+
+#+begin_src elisp :tangle packages.el
+(package! org-present)
+;(package! org-tree-slide)
+(package! centered-window)
+#+end_src
+
+https://github.com/daviwil/dotfiles/blob/master/Emacs.org#org-present helped a lot
+
+#+begin_src elisp :tangle config.el
+(setq cwm-incremental-padding t)
+(setq cwm-use-vertical-padding t)
+(setq cwm-incremental-padding-% 5)
+(setq cwm-frame-internal-border 50)
+(setq cwm-centered-window-width 3000)
+(remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
+(setq indicate-empty-lines nil)
+(defun threddast/org-present-prepare-slide ()
+  (org-overview)
+  (org-show-entry)
+  (org-show-children)
+  (org-latex-preview)
+  )
+
+(defun threddast/org-present-hook ()
+  ;(setq-local face-remapping-alist '((header-line (:height 1.5) variable-pitch)))
+  ;;                                    (header-line (:height 4.5) variable-pitch)
+  ;;                                    (org-code (:height 1.55) org-code)
+  ;;                                    (org-verbatim (:height 1.55) org-verbatim)
+  ;;                                    (org-block (:height 1.25) org-block)
+  ;;                                    (org-block-begin-line (:height 0.7) org-block)))
+  (set-face-attribute 'header-line t :background "#ffffff")
+  (setq header-line-format " ")
+  (org-display-inline-images)
+  (centered-window-mode 1)
+  (display-line-numbers-mode 0)
+  (org-present-hide-cursor)
+  (threddast/org-present-prepare-slide))
+
+(defun threddast/org-present-quit-hook ()
+ ; (setq-local face-remapping-alist '((default variable-pitch default)))
+  (org-present-show-cursor)
+  (setq header-line-format nil)
+  (centered-window-mode 0)
+)
+
+(defun threddast/org-present-prev ()
+  (interactive)
+  (org-present-prev)
+  (threddast/org-present-prepare-slide))
+
+(defun threddast/org-present-next ()
+  (interactive)
+  (org-present-next)
+  (threddast/org-present-prepare-slide))
+
+(use-package org-present
+  :bind (:map org-present-mode-keymap
+         ("[right]" . nil)
+         ("[left]" . nil)
+         ("C-<down>" . org-present-hide-cursor)
+         ("C-<up>" . org-present-show-cursor)
+         ("C-<right>" . threddast/org-present-next)
+         ("C-<left>" . threddast/org-present-prev))
+  :hook (;(org-present-mode . evil-normalize-keymaps)
+         (org-present-mode . threddast/org-present-hook)
+         (org-present-mode-quit . threddast/org-present-quit-hook)))
+#+end_src
+
+This would be a config for org-tree-slide, included with the org =+present= flag. However, I find it difficult to customise, =org-present= is more than enough for my use case at the moment
+
+#+begin_src elisp
+;(setq +org-present-text-scale 1.5)
+;(setq +org-present-hide-first-heading t)
+;(require 'org-tree-slide)
+(defun threddast/org-start-presentation ()
+  (interactive)
+  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
+  (centered-window-mode t)
+  )
+
+(defun threddast/org-end-presentation ()
+  (interactive)
+  ;; Show the mode line again
+)
+
+(use-package org-tree-slide
+  :hook ((org-tree-slide-play . threddast/org-start-presentation)
+         (org-tree-slide-stop . threddast/org-end-presentation))
+  :custom
+  (evil-define-key 'normal org-tree-slide-mode-map
+    (kbd "q") 'dw/org-end-presentation
+    (kbd "C-<right>") 'org-tree-slide-move-next-tree
+    (kbd "C-<left>") 'org-tree-slide-move-previous-tree)
+  (org-tree-slide-activate-message "Presentation started!")
+  (org-tree-slide-deactivate-message "Presentation finished!")
+  ;; activate the presentation profile
+  (org-tree-slide-header t)
+  (org-tree-slide-slide-in-effect t)
+  (org-tree-slide-heading-emphasis nil)
+  (org-tree-slide-cursor-init t)
+  (org-tree-slide-modeline-display 'outside)
+  (org-tree-slide-skip-done nil)
+  (org-tree-slide-skip-comments t)
+  )
+#+end_src
+
+** Latex fragments in org mode
+See https://lists.gnu.org/archive/html/emacs-orgmode/2014-03/msg00747.html for a description of the problem
+#+begin_src elisp :tangle config.el
+;; (setq org-pretty-entities-include-sub-superscripts nil)
+#+end_src
+
+** Org-caldav
+
+#+begin_src elisp :tangle packages.el
+(package! org-caldav)
+#+end_src
+
+#+begin_src elisp :tangle config.el
+;; (setq org-caldav-url "https://cloud.threddast.com/remote.php/dav/calendars/threddast")
+;; (setq org-caldav-calendar-id "emacs")
+;; (setq org-caldav-inbox "~/roam/0-inbox/calendar.org")
+;; (setq org-caldav-files
+;;         (append (directory-files-recursively "~/roam/0-inbox/" "\\.org$")
+;;                 (directory-files-recursively "~/roam/1-projects/" "\\.org$")
+;;                 (directory-files-recursively "~/roam/2-areas/" "\\.org$")))
+;; (setq org-icalendar-timezone "Europe/Zurich")
+;; (setq org-icalendar-use-deadline '(event-if-todo-not-done todo-due))
+;; (setq org-caldav-backup-file nil)
+#+end_src
+
+* Other packages
+
+** Treemacs
+
+#+begin_src elisp :tangle config.el
+(setq doom-themes-treemacs-theme "doom-colors")
+(setq treemacs-width 30)
+;; because of https://github.com/doomemacs/doomemacs/issues/7126
+(set-popup-rule! "^ ?\\*Treemacs" :ignore t)
+#+end_src
+
+** Transpose frame
+
+#+begin_src elisp :tangle packages.el
+(package! transpose-frame)
+#+end_src
+
+** Setting tab width
+
+#+begin_src elisp :tangle config.el
+(setq-default tab-width '2)
+#+end_src
+
+** Guix
+
+#+begin_src elisp :tangle packages.el
+(package! guix)
+#+end_src
+
+** Beancount multiple files
+
+#+begin_src elisp
+  ;; Define variable
+
+  (defvar my-beancount-accounts-file nil
+    "Full path to beancount accounts file.")
+
+
+  ;; (Re-)Define function
+
+  ;; N.B. this must go AFTER (require 'beancount) in your init
+  ;; file, as we are re-defining the function.
+(require 'beancount)
+  (defun beancount-account-completion-table (string pred action)
+    (if (eq action 'metadata) '(metadata (category . beancount-account))
+      (if (null beancount-accounts)
+          (setq beancount-accounts
+                (save-current-buffer
+                  (find-file-noselect my-beancount-accounts-file)
+                  (set-buffer (file-name-nondirectory
+                               my-beancount-accounts-file))
+                  (sort (beancount-collect beancount-account-regexp 0)
+#'string<))))
+      (complete-with-action action beancount-accounts string pred)))
+
+
+  ;; Set variable
+
+  (setq my-beancount-accounts-file "~/finances/accounts.beancount")
+
+#+end_src
+
+** Multiple vterm
+
+#+begin_src elisp :tangle packages.el
+(package! multi-vterm)
+#+end_src
+
+** Magit
+
+#+begin_src elisp :tangle config.el
+(setq git-commit-summary-max-length 80)
+#+end_src
+
+** Polymode
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! polymode)
+#+end_src
+
+#+begin_src elisp :tangle config.el
+#+end_src
+
+** Tree sitter for regex
+#+begin_src elisp
+(package! tree-sitter-regex
+  :recipe (:host github
+           :repo "tree-sitter/tree-sitter-regex"
+           :post-build
+           (my/tree-sitter-compile-grammar
+            (expand-file-name "ts-grammars" user-emacs-directory))))
+
+#+end_src
+
+#+begin_src elisp
+
+
+(defun my/tree-sitter-compile-grammar (destination &optional path)
+  "Compile grammar at PATH, and place the resulting shared library in DESTINATION."
+  (interactive "fWhere should we put the shared library? \nfWhat tree-sitter grammar are we compiling? \n")
+  (make-directory destination 'parents)
+
+  (let* ((default-directory
+          (expand-file-name "src/" (or path default-directory)))
+         (parser-name
+          (thread-last (expand-file-name "grammar.json" default-directory)
+                       (json-read-file)
+                       (alist-get 'name)))
+         (emacs-module-url
+          "https://raw.githubusercontent.com/casouri/tree-sitter-module/master/emacs-module.h")
+         (tree-sitter-lang-in-url
+          "https://raw.githubusercontent.com/casouri/tree-sitter-module/master/tree-sitter-lang.in")
+         (needs-cpp-compiler nil))
+    (message "Compiling grammar at %s" path)
+
+    (url-copy-file emacs-module-url "emacs-module.h" :ok-if-already-exists)
+    (url-copy-file tree-sitter-lang-in-url "tree-sitter-lang.in" :ok-if-already-exists)
+
+    (with-temp-buffer
+      (unless
+          (zerop
+           (apply #'call-process
+                  (if (file-exists-p "scanner.cc") "c++" "cc") nil t nil
+                  "parser.c" "-I." "--shared" "-o"
+                  (expand-file-name
+                   (format "libtree-sitter-%s%s" parser-name module-file-suffix)
+                   destination)
+                  (cond ((file-exists-p "scanner.c") '("scanner.c"))
+                        ((file-exists-p "scanner.cc") '("scanner.cc")))))
+        (user-error
+         "Unable to compile grammar, please file a bug report\n%s"
+         (buffer-string))))
+    (message "Completed compilation")))
+#+end_src
+
+#+begin_src elisp :tangle packages.el
+(package! regex-ts-mode
+  :recipe (:host github
+           :repo "threddast/regex-ts-mode"))
+#+end_src

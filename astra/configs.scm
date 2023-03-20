@@ -13,7 +13,10 @@
   #:use-module (astra utils)
   #:use-module (astra systems)
   #:use-module (astra features nix)
+  #:use-module (astra features hyprland)
+  #:use-module (astra features bluetooth)
   #:use-module (astra features state)
+  #:use-module (astra features shells)
   #:use-module (astra features networking)
   #:export (
             %astra-base-system-packages
@@ -26,7 +29,7 @@
 ;; Operating system configuration should be done in engstrand/systems.scm,
 ;; and computer specific settings in each corresponding file in engstrand/systems/.
 (define %astra-base-system-packages
-  (pkgs '("git" "nss-certs")))
+  (pkgs '("curl" "git" "nss-certs")))
 
 ;; Move some of the packages to separate features?
 (define %astra-base-home-packages
@@ -59,10 +62,10 @@
     #:font-sans (font "Iosevka Aile" #:size 13)
     #:font-serif (font "Iosevka Aile" #:size 13))
    (feature-pipewire)
-   (feature-backlight)
+;  (feature-backlight)
    (feature-bash)
-   (feature-zsh)
-   (feature-ssh)
+;   (feature-zsh)
+;   (feature-ssh)
    (feature-xdg
     #:xdg-user-directories-configuration
     (home-xdg-user-directories-configuration
@@ -85,10 +88,17 @@
    ;;      "git@github.com:engstrand-config/home-dwl-service.git")
    ;;     ("engstrand-config/farg" .
    ;;      "git@github.com:engstrand-config/farg.git")))
+   (feature-ssh)
    (feature-dotfiles
     #:dotfiles
     `(
+      (".aliasrc" ,(local-file "files/aliasrc"))
+      (".inputrc" ,(local-file "files/inputrc"))
       (".nix-channels" ,(local-file "files/nix-channels"))
+      (".config/hypr/hyprland.conf" ,(local-file "files/config/hypr/hyprland.conf"))
       (".config/guix/channels.scm" ,(local-file "channels.scm"))
       (".config/guix/config.scm" ,(make-entrypoint))))
-   (feature-nix)))
+;  (feature-nix)
+  (feature-hyprland)
+  (feature-bluetooth)
+   ))

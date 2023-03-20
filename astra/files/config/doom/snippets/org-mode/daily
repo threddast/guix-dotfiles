@@ -1,0 +1,57 @@
+# -*- mode: snippet -*-
+# name: daily
+# key: <d
+# --
+
+*  Daily Goal
+
+$0
+
+* Log
+
+
+* Todos
+
+
+* Personal
+
+** [[id:dd07f9ad-ea8e-4770-84e1-a472bf8ab060][Journal]]
+
+
+** [[id:ffcce887-6e84-4b64-9668-3dedd5b52688][Storyworthy]]
+
+
+** Meta
+
+- Where: ${1:Zurich}
+- Weather: $2
+- Music: $3
+- Sleep: ${4:7}h
+- Weight: $5
+- Energy: ${6:L/M/H}
+- Effective: ${7:L/M/H}
+- Mood: $8
+
+*** [[id:68490106-150f-4798-a8f0-67f021634ed6][Exercise]]
+
+
+*** [[id:90a0ebf3-f591-4270-99c0-ce68c779fcb5][TIL]]
+
+
+*** [[id:c6da1cc7-4332-4039-b3ff-60ece2d0710f][Highlights]]
+
+
+*** [[id:41ca3e3b-b914-4af4-b609-7521bd1fd0ce][Lowlights]]
+
+
+*** Eats
+
+- Breakie: ???
+- Lunch: ???
+- Dinner: ???
+
+*** [[id:a9b3f525-75b2-41c3-bb6a-1b304e95d279][Gratitude]]
+
+1.
+2.
+3.

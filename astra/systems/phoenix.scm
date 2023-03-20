@@ -18,15 +18,9 @@
    (list
     (file-system
      (mount-point "/")
-     (device
-      (uuid "36531b8d-0cd1-4164-9725-a5a4094c1840"
-            'ext4))
+     (device (file-system-label "guixroot"))
      (type "ext4"))
     (file-system
      (mount-point "/boot/efi")
-     (device (uuid "8202-E8AC" 'fat32))
-     (type "vfat")))
-   #:swap-devices
-   (list
-    (swap-space
-     (target (uuid "5d88bf77-d8bb-4690-bb9b-d2656fbbda90")))))))
+     (device (file-system-label "guixboox"))
+     (type "vfat"))))))

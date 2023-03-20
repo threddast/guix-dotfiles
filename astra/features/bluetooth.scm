@@ -18,9 +18,7 @@
       'bluetooth-add-user-groups
       rde-account-service-type
       (list "lp"))
-     (bluetooth-service
-      #:bluez bluez
-      #:auto-enable? auto-enable?)))
+     (service bluetooth-service-type)))
 
   (feature
    (name 'bluetooth)

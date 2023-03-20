@@ -1,0 +1,44 @@
+#virtual_modifiers:
+  - capslock
+modmap:
+  - name: emacs
+    remap:
+      space:
+        held: capslock
+        alone: space
+        alone_timeout_millis: 500
+
+      # Swap alt and control
+      leftalt: leftctrl
+      rightalt: leftalt
+
+      # Swap esc and caplock
+      esc: capslock
+      capslock: esc
+      # CTRL -> SUPER/ALT
+      #rightctrl: rightalt
+        #leftctrl: esc
+      #leftmeta:  leftalt
+
+        #KEY_CAPSLOCK:
+        #KEY_HIRAGANA
+        # held: KEY_HIRAGANA
+        # alone: KEY_ESC
+
+keymap:
+  - remap:
+    #hiragana: C-x
+      capslock-j: left
+      capslock-l: right
+      capslock-i: up
+      capslock-k: down
+      capslock-u: home
+      capslock-o: end
+      #capslock-semicolon: delete
+      #capslock-h: backspace
+      #capslock-s: left
+      #capslock-f: right
+      #capslock-e: up
+      #capslock-d: down
+      #capslock-w: home
+      #capslock-r: end

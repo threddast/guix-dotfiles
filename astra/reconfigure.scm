@@ -46,7 +46,7 @@
   ;; All is good, create the configuration
   (define %generated-config
     (rde-config
-     (initial-os initial-os)
+;     (initial-os initial-os)
      (features
        (append %user-features
                %astra-system-base-features
@@ -57,15 +57,16 @@
     (rde-config-home-environment %generated-config))
 
   (define %astra-system
-    (operating-system
-     (inherit (rde-config-operating-system %generated-config))
-     (kernel-arguments
-      (append
-       (get-value
-        'kernel-arguments %generated-config
-        (operating-system-user-kernel-arguments initial-os))
-       (get-feature-kernel-arguments 'kernel-arguments-radios %generated-config)))
-     (issue (operating-system-issue initial-os))))
+    (rde-config-operating-system %generated-config))
+ ;   (operating-system
+ ;    (inherit (rde-config-operating-system %generated-config))
+ ;    (kernel-arguments
+ ;     (append
+ ;      (get-value
+ ;       'kernel-arguments %generated-config
+ ;       (operating-system-user-kernel-arguments initial-os))
+ ;      (get-feature-kernel-arguments 'kernel-arguments-radios %generated-config)))
+ ;    (issue (operating-system-issue initial-os))))
 
   (match target
     ("home" %astra-home)
